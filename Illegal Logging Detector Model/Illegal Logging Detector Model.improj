@@ -1,0 +1,942 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ImagimobStudio version="1.1.0">
+  <Job id="81924d88-2ba6-11f0-9830-7141907cfcc9" />
+  <Preprocessor inshape="[1]" intype="Float32" infreq="16000" outshape="[300,40]" outtype="Float32">
+    <Unit id="Core.Packages.SpeechAudio">
+      <Argument param="output_freq" type="Double">100</Argument>
+      <Argument param="output_features" type="Int32">40</Argument>
+      <Argument param="low_cut_freq" type="Int32">300</Argument>
+      <Argument param="high_cut_freq" type="Int32">8000</Argument>
+      <Argument param="input" type="String">data</Argument>
+      <Argument param="time_input" type="String">time</Argument>
+      <Argument param="output" type="String">data</Argument>
+      <Argument param="time_output" type="String">time</Argument>
+    </Unit>
+    <Unit id="Core.Packages.ContextualWindow">
+      <Argument param="contextual_length_sec" type="Double">3</Argument>
+      <Argument param="prediction_freq" type="Double">10</Argument>
+      <Argument param="input" type="String">data</Argument>
+      <Argument param="time_input" type="String">time</Argument>
+      <Argument param="output" type="String">data</Argument>
+      <Argument param="time_output" type="String">time</Argument>
+    </Unit>
+  </Preprocessor>
+  <ModelFactory>
+    <Epochs>100</Epochs>
+    <BatchSize>256</BatchSize>
+    <SplitCount>16</SplitCount>
+    <Patience>20</Patience>
+    <AppendModels>True</AppendModels>
+    <LossFunction>CategoricalCrossentropy</LossFunction>
+    <FactoryOptions>None</FactoryOptions>
+    <HardwareType>Default</HardwareType>
+    <TrainingEnvironment>
+    </TrainingEnvironment>
+    <ModelFamily>Conv1DLSTM</ModelFamily>
+    <ModelFlavor>SmallKern</ModelFlavor>
+    <ClassifierType>Dense</ClassifierType>
+    <Optimization>Accuracy</Optimization>
+    <Pooling>True</Pooling>
+    <Downscale>False</Downscale>
+    <LearnRate>Mid</LearnRate>
+    <RegularizationFactor>Low</RegularizationFactor>
+    <LastNetworkInputShape>[300,40]</LastNetworkInputShape>
+    <LastClassCount>4</LastClassCount>
+    <Optimizer>
+      <LearningRate>0.001</LearningRate>
+      <WeightDecay>0.0001</WeightDecay>
+    </Optimizer>
+    <BuildSteps>
+      <Training />
+      <ConfusionMatrix />
+    </BuildSteps>
+  </ModelFactory>
+  <Models>
+    <Model name="conv1dlstm-small-accuracy-0" id="35a0dd78-6733-4088-85e1-712cf1d80721">
+      <LossFunction>CategoricalCrossentropy</LossFunction>
+      <Epochs>100</Epochs>
+      <BatchSize>256</BatchSize>
+      <SplitCount>16</SplitCount>
+      <Patience>20</Patience>
+      <TrainingEnvironment>
+      </TrainingEnvironment>
+      <Optimizer>
+        <LearningRate>0.004</LearningRate>
+        <WeightDecay>0.0001</WeightDecay>
+      </Optimizer>
+      <Network inshape="[300,40]" intype="Float32" infreq="0" outshape="[4]" outtype="Float32">
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">12</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">24</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">24</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.MaxPool1D">
+          <Argument param="pool_size" type="Int32">2</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">valid</Argument>
+        </Unit>
+        <Unit id="Core.Layers.LSTM">
+          <Argument param="units" type="Int32">12</Argument>
+          <Argument param="activation" type="String">tanh</Argument>
+          <Argument param="recurrent_activation" type="String">sigmoid</Argument>
+          <Argument param="use_bias" type="Boolean">True</Argument>
+          <Argument param="return_sequences" type="Boolean">False</Argument>
+          <Argument param="return_state" type="Boolean">False</Argument>
+          <Argument param="stateful" type="Boolean">False</Argument>
+          <Argument param="go_backwards" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Flatten" />
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">40</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dropout">
+          <Argument param="rate" type="Double">0.1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">4</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">softmax</Argument>
+        </Unit>
+      </Network>
+      <BuildSteps>
+        <Training />
+        <ConfusionMatrix />
+      </BuildSteps>
+      <SymbolWeights override="False">
+        <SymbolWeight symbol="Chainsaw" weight="1" />
+        <SymbolWeight symbol="Standby" weight="1" />
+        <SymbolWeight symbol="Human" weight="1" />
+      </SymbolWeights>
+      <Preprocessor override="False" inshape="[1]" intype="Float32" infreq="16000" outshape="[300,40]" outtype="Float32">
+        <Unit id="Core.Packages.SpeechAudio">
+          <Argument param="output_freq" type="Double">100</Argument>
+          <Argument param="output_features" type="Int32">40</Argument>
+          <Argument param="low_cut_freq" type="Int32">300</Argument>
+          <Argument param="high_cut_freq" type="Int32">8000</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+        <Unit id="Core.Packages.ContextualWindow">
+          <Argument param="contextual_length_sec" type="Double">3</Argument>
+          <Argument param="prediction_freq" type="Double">10</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+      </Preprocessor>
+      <Postprocessor override="False" inshape="[128,3]" intype="Float32" infreq="1" outshape="[128,3]" outtype="Float32" />
+    </Model>
+    <Model name="conv1dlstm-small-accuracy-1" id="7cdf823f-f3eb-44c3-81fd-4a9eafd9b31d">
+      <LossFunction>CategoricalCrossentropy</LossFunction>
+      <Epochs>100</Epochs>
+      <BatchSize>256</BatchSize>
+      <SplitCount>16</SplitCount>
+      <Patience>20</Patience>
+      <TrainingEnvironment>
+      </TrainingEnvironment>
+      <Optimizer>
+        <LearningRate>0.004</LearningRate>
+        <WeightDecay>0.0001</WeightDecay>
+      </Optimizer>
+      <Network inshape="[300,40]" intype="Float32" infreq="0" outshape="[4]" outtype="Float32">
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">16</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">16</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">16</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.MaxPool1D">
+          <Argument param="pool_size" type="Int32">2</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">valid</Argument>
+        </Unit>
+        <Unit id="Core.Layers.LSTM">
+          <Argument param="units" type="Int32">16</Argument>
+          <Argument param="activation" type="String">tanh</Argument>
+          <Argument param="recurrent_activation" type="String">sigmoid</Argument>
+          <Argument param="use_bias" type="Boolean">True</Argument>
+          <Argument param="return_sequences" type="Boolean">False</Argument>
+          <Argument param="return_state" type="Boolean">False</Argument>
+          <Argument param="stateful" type="Boolean">False</Argument>
+          <Argument param="go_backwards" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Flatten" />
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">40</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dropout">
+          <Argument param="rate" type="Double">0.1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">4</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">softmax</Argument>
+        </Unit>
+      </Network>
+      <BuildSteps>
+        <Training />
+        <ConfusionMatrix />
+      </BuildSteps>
+      <SymbolWeights override="False">
+        <SymbolWeight symbol="Chainsaw" weight="1" />
+        <SymbolWeight symbol="Standby" weight="1" />
+        <SymbolWeight symbol="Human" weight="1" />
+      </SymbolWeights>
+      <Preprocessor override="False" inshape="[1]" intype="Float32" infreq="16000" outshape="[300,40]" outtype="Float32">
+        <Unit id="Core.Packages.SpeechAudio">
+          <Argument param="output_freq" type="Double">100</Argument>
+          <Argument param="output_features" type="Int32">40</Argument>
+          <Argument param="low_cut_freq" type="Int32">300</Argument>
+          <Argument param="high_cut_freq" type="Int32">8000</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+        <Unit id="Core.Packages.ContextualWindow">
+          <Argument param="contextual_length_sec" type="Double">3</Argument>
+          <Argument param="prediction_freq" type="Double">10</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+      </Preprocessor>
+      <Postprocessor override="False" inshape="[128,3]" intype="Float32" infreq="1" outshape="[128,3]" outtype="Float32" />
+    </Model>
+    <Model name="conv1dlstm-small-accuracy-2" id="a1085ac4-8a93-4b8b-93c3-11c23108eb23">
+      <LossFunction>CategoricalCrossentropy</LossFunction>
+      <Epochs>100</Epochs>
+      <BatchSize>256</BatchSize>
+      <SplitCount>16</SplitCount>
+      <Patience>20</Patience>
+      <TrainingEnvironment>
+      </TrainingEnvironment>
+      <Optimizer>
+        <LearningRate>0.004</LearningRate>
+        <WeightDecay>0.0001</WeightDecay>
+      </Optimizer>
+      <Network inshape="[300,40]" intype="Float32" infreq="0" outshape="[4]" outtype="Float32">
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">16</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">32</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">32</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.MaxPool1D">
+          <Argument param="pool_size" type="Int32">2</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">valid</Argument>
+        </Unit>
+        <Unit id="Core.Layers.LSTM">
+          <Argument param="units" type="Int32">32</Argument>
+          <Argument param="activation" type="String">tanh</Argument>
+          <Argument param="recurrent_activation" type="String">sigmoid</Argument>
+          <Argument param="use_bias" type="Boolean">True</Argument>
+          <Argument param="return_sequences" type="Boolean">False</Argument>
+          <Argument param="return_state" type="Boolean">False</Argument>
+          <Argument param="stateful" type="Boolean">False</Argument>
+          <Argument param="go_backwards" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Flatten" />
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">40</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dropout">
+          <Argument param="rate" type="Double">0.1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">4</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">softmax</Argument>
+        </Unit>
+      </Network>
+      <BuildSteps>
+        <Training />
+        <ConfusionMatrix />
+      </BuildSteps>
+      <SymbolWeights override="False">
+        <SymbolWeight symbol="Chainsaw" weight="1" />
+        <SymbolWeight symbol="Standby" weight="1" />
+        <SymbolWeight symbol="Human" weight="1" />
+      </SymbolWeights>
+      <Preprocessor override="False" inshape="[1]" intype="Float32" infreq="16000" outshape="[300,40]" outtype="Float32">
+        <Unit id="Core.Packages.SpeechAudio">
+          <Argument param="output_freq" type="Double">100</Argument>
+          <Argument param="output_features" type="Int32">40</Argument>
+          <Argument param="low_cut_freq" type="Int32">300</Argument>
+          <Argument param="high_cut_freq" type="Int32">8000</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+        <Unit id="Core.Packages.ContextualWindow">
+          <Argument param="contextual_length_sec" type="Double">3</Argument>
+          <Argument param="prediction_freq" type="Double">10</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+      </Preprocessor>
+      <Postprocessor override="False" inshape="[128,3]" intype="Float32" infreq="1" outshape="[128,3]" outtype="Float32" />
+    </Model>
+    <Model name="conv1dlstm-small-accuracy-3" id="3d2b3a93-adb2-4290-83af-bc56e3eaf354">
+      <LossFunction>CategoricalCrossentropy</LossFunction>
+      <Epochs>100</Epochs>
+      <BatchSize>256</BatchSize>
+      <SplitCount>16</SplitCount>
+      <Patience>20</Patience>
+      <TrainingEnvironment>
+      </TrainingEnvironment>
+      <Optimizer>
+        <LearningRate>0.004</LearningRate>
+        <WeightDecay>0.0001</WeightDecay>
+      </Optimizer>
+      <Network inshape="[300,40]" intype="Float32" infreq="0" outshape="[4]" outtype="Float32">
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">32</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">32</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Convolution1D">
+          <Argument param="filters" type="Int32">32</Argument>
+          <Argument param="kernel_size" type="Int32">3</Argument>
+          <Argument param="strides" type="Int32">1</Argument>
+          <Argument param="padding" type="String">same</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.MaxPool1D">
+          <Argument param="pool_size" type="Int32">2</Argument>
+          <Argument param="strides" type="Int32">2</Argument>
+          <Argument param="padding" type="String">valid</Argument>
+        </Unit>
+        <Unit id="Core.Layers.LSTM">
+          <Argument param="units" type="Int32">32</Argument>
+          <Argument param="activation" type="String">tanh</Argument>
+          <Argument param="recurrent_activation" type="String">sigmoid</Argument>
+          <Argument param="use_bias" type="Boolean">True</Argument>
+          <Argument param="return_sequences" type="Boolean">False</Argument>
+          <Argument param="return_state" type="Boolean">False</Argument>
+          <Argument param="stateful" type="Boolean">False</Argument>
+          <Argument param="go_backwards" type="Boolean">False</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Flatten" />
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">40</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.BatchNormalization">
+          <Argument param="epsilon" type="Double">0.001</Argument>
+          <Argument param="axis" type="Int32">-1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">relu</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dropout">
+          <Argument param="rate" type="Double">0.1</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Dense">
+          <Argument param="units" type="Int32">4</Argument>
+          <Argument param="use_bias" type="Boolean">False</Argument>
+          <Argument param="activation" type="String">linear</Argument>
+        </Unit>
+        <Unit id="Core.Layers.Activation">
+          <Argument param="activation" type="String">softmax</Argument>
+        </Unit>
+      </Network>
+      <BuildSteps>
+        <Training />
+        <ConfusionMatrix />
+      </BuildSteps>
+      <SymbolWeights override="False">
+        <SymbolWeight symbol="Chainsaw" weight="1" />
+        <SymbolWeight symbol="Standby" weight="1" />
+        <SymbolWeight symbol="Human" weight="1" />
+      </SymbolWeights>
+      <Preprocessor override="False" inshape="[1]" intype="Float32" infreq="16000" outshape="[300,40]" outtype="Float32">
+        <Unit id="Core.Packages.SpeechAudio">
+          <Argument param="output_freq" type="Double">100</Argument>
+          <Argument param="output_features" type="Int32">40</Argument>
+          <Argument param="low_cut_freq" type="Int32">300</Argument>
+          <Argument param="high_cut_freq" type="Int32">8000</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+        <Unit id="Core.Packages.ContextualWindow">
+          <Argument param="contextual_length_sec" type="Double">3</Argument>
+          <Argument param="prediction_freq" type="Double">10</Argument>
+          <Argument param="input" type="String">data</Argument>
+          <Argument param="time_input" type="String">time</Argument>
+          <Argument param="output" type="String">data</Argument>
+          <Argument param="time_output" type="String">time</Argument>
+        </Unit>
+      </Preprocessor>
+      <Postprocessor override="False" inshape="[128,3]" intype="Float32" infreq="1" outshape="[128,3]" outtype="Float32" />
+    </Model>
+  </Models>
+  <Database balance="AnnotatedLength" redistributionScope="Everything">
+    <SymbolMap>
+      <Symbol name="Chainsaw" id="1" weight="1" />
+      <Symbol name="Standby" id="2" weight="1" />
+      <Symbol name="Human" id="3" weight="1" />
+    </SymbolMap>
+    <DataSet id="unassigned" targetSize="0" labels="Unassigned" />
+    <DataSet id="train" targetSize="0.6974551377766972" labels="Complete">
+      <Session name="chainsaw13" sessionId="fac92737-d9a5-4436-9284-0e6f0c5c4ec8" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw13" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507216163611803" start="0" length="48.887125">/Data/chainsaw13/chainsaw13.wav</DataFile>
+        <SessionFile>/Data/chainsaw13/chainsaw13.imsession</SessionFile>
+        <LabelFile modified="5250507228400410309">/Data/chainsaw13/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="48.887125">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw6" sessionId="e9aea54d-0a76-4f55-9b3f-e13f46b27458" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw6" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507214712718186" start="0" length="59.1708125">/Data/chainsaw6/chainsaw6.wav</DataFile>
+        <SessionFile>/Data/chainsaw6/chainsaw6.imsession</SessionFile>
+        <LabelFile modified="5250507229377165124">/Data/chainsaw6/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.1708125">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people8" sessionId="7140d02a-a88d-4c1e-9e91-b6b73299a7d8" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people8" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220791646095" start="0" length="59.5218125">/Data/people8/people8.wav</DataFile>
+        <SessionFile>/Data/people8/people8.imsession</SessionFile>
+        <LabelFile modified="5250507233605986407">/Data/people8/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people9" sessionId="4d959c92-b60a-47f6-8af5-1921c5942591" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people9" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507221031363123" start="0" length="59.5218125">/Data/people9/people9.wav</DataFile>
+        <SessionFile>/Data/people9/people9.imsession</SessionFile>
+        <LabelFile modified="5250507233683036976">/Data/people9/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest3" sessionId="50b183c7-aa2c-4195-b8da-631b481f7099" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest3" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507217939705374" start="0" length="59.5218125">/Data/forest3/forest3.wav</DataFile>
+        <SessionFile>/Data/forest3/forest3.imsession</SessionFile>
+        <LabelFile modified="5250507231869399111">/Data/forest3/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest11" sessionId="9c9bb99a-65ba-4053-8d44-92b1b4c7053a" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest11" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507219190493092" start="0" length="59.5218125">/Data/forest11/forest11.wav</DataFile>
+        <SessionFile>/Data/forest11/forest11.imsession</SessionFile>
+        <LabelFile modified="5250507231500001528">/Data/forest11/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest9" sessionId="ab421b4e-7752-478c-8350-176f7c993297" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest9" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507218920101404" start="0" length="59.5218125">/Data/forest9/forest9.wav</DataFile>
+        <SessionFile>/Data/forest9/forest9.imsession</SessionFile>
+        <LabelFile modified="5250507232434347684">/Data/forest9/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw1" sessionId="4194e080-a3d3-409f-b1ad-af7e3d9f43b9" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw1" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507213464140468" start="0" length="59.5218125">/Data/chainsaw1/chainsaw1.wav</DataFile>
+        <SessionFile>/Data/chainsaw1/chainsaw1.imsession</SessionFile>
+        <LabelFile modified="5250507226018820676">/Data/chainsaw1/label.label</LabelFile>
+        <Labels>
+          <Label count="6" length="40.2641615">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest7" sessionId="8757571d-f927-47e8-9283-3bb61778f09e" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest7" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507218640914485" start="0" length="59.5218125">/Data/forest7/forest7.wav</DataFile>
+        <SessionFile>/Data/forest7/forest7.imsession</SessionFile>
+        <LabelFile modified="5250507232255879822">/Data/forest7/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw11" sessionId="33f6a9d2-d75f-4f2e-9e97-2f06a9de5c1a" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw11" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507215809965154" start="0" length="59.5218125">/Data/chainsaw11/chainsaw11.wav</DataFile>
+        <SessionFile>/Data/chainsaw11/chainsaw11.imsession</SessionFile>
+        <LabelFile modified="5250507229160464299">/Data/chainsaw11/label.label</LabelFile>
+        <Labels>
+          <Label count="2" length="56.92444">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw8" sessionId="0525cc2a-3c3d-4a9b-a5c9-544330cf9462" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw8" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507215203887550" start="0" length="59.5218125">/Data/chainsaw8/chainsaw8.wav</DataFile>
+        <SessionFile>/Data/chainsaw8/chainsaw8.imsession</SessionFile>
+        <LabelFile modified="5250507230571602340">/Data/chainsaw8/label.label</LabelFile>
+        <Labels>
+          <Label count="2" length="57.4742867">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw12" sessionId="8fa64904-3c71-460f-bbef-f76e39290fd9" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw12" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507216026631599" start="0" length="51.3498125">/Data/chainsaw12/chainsaw12.wav</DataFile>
+        <SessionFile>/Data/chainsaw12/chainsaw12.imsession</SessionFile>
+        <LabelFile modified="5250507228267570418">/Data/chainsaw12/label.label</LabelFile>
+        <Labels>
+          <Label count="2" length="50.0129613">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest13" sessionId="6d458863-6773-480a-9f46-318f19868fea" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest13" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507219450385245" start="0" length="59.5218125">/Data/forest13/forest13.wav</DataFile>
+        <SessionFile>/Data/forest13/forest13.imsession</SessionFile>
+        <LabelFile modified="5250507231685444637">/Data/forest13/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people2" sessionId="e14e9906-bfe8-4dd7-902e-52dcfff827ae" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people2" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220180486536" start="0" length="59.5218125">/Data/people2/people2.wav</DataFile>
+        <SessionFile>/Data/people2/people2.imsession</SessionFile>
+        <LabelFile modified="5250507233051414037">/Data/people2/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people12" sessionId="5cb56939-2254-4c62-be01-97673cf40813" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people12" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507221427926151" start="0" length="59.5218125">/Data/people12/people12.wav</DataFile>
+        <SessionFile>/Data/people12/people12.imsession</SessionFile>
+        <LabelFile modified="5250507232863398299">/Data/people12/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest4" sessionId="eb128ceb-af84-4485-8a42-77dbe337b27d" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest4" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507218268542972" start="0" length="59.5218125">/Data/forest4/forest4.wav</DataFile>
+        <SessionFile>/Data/forest4/forest4.imsession</SessionFile>
+        <LabelFile modified="5250507231966761881">/Data/forest4/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest10" sessionId="b98ba27c-cbe3-460d-84bb-e0676b929fb1" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest10" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507219070245760" start="0" length="59.5218125">/Data/forest10/forest10.wav</DataFile>
+        <SessionFile>/Data/forest10/forest10.imsession</SessionFile>
+        <LabelFile modified="5250507231260000344">/Data/forest10/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw10" sessionId="70aea067-cea8-4162-8000-d211543d1bae" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw10" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507215592712146" start="0" length="59.5218125">/Data/chainsaw10/chainsaw10.wav</DataFile>
+        <SessionFile>/Data/chainsaw10/chainsaw10.imsession</SessionFile>
+        <LabelFile modified="5250507227027206564">/Data/chainsaw10/label.label</LabelFile>
+        <Labels>
+          <Label count="2" length="56.8613854">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest6" sessionId="6d7b47b1-5a4c-4580-b1b1-dea02ee8719b" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest6" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507218390566994" start="0" length="59.5218125">/Data/forest6/forest6.wav</DataFile>
+        <SessionFile>/Data/forest6/forest6.imsession</SessionFile>
+        <LabelFile modified="5250507232173853969">/Data/forest6/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw5" sessionId="a09e5bc2-40db-4445-86fb-a701047e498e" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw5" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507214507659413" start="0" length="59.5218125">/Data/chainsaw5/chainsaw5.wav</DataFile>
+        <SessionFile>/Data/chainsaw5/chainsaw5.imsession</SessionFile>
+        <LabelFile modified="5250507229030337635">/Data/chainsaw5/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people5" sessionId="c1ff7456-39b8-4e37-ad78-9f56ef9b3a15" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people5" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220450536213" start="0" length="59.5218125">/Data/people5/people5.wav</DataFile>
+        <SessionFile>/Data/people5/people5.imsession</SessionFile>
+        <LabelFile modified="5250507233311499947">/Data/people5/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people6" sessionId="17c0d4b0-1a26-4076-973d-92dd0563fa54" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people6" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220603656528" start="0" length="59.5218125">/Data/people6/people6.wav</DataFile>
+        <SessionFile>/Data/people6/people6.imsession</SessionFile>
+        <LabelFile modified="5250507233400812952">/Data/people6/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people4" sessionId="5ec3b960-ea57-4b24-a970-d4084e9bd729" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people4" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220361771133" start="0" length="59.5218125">/Data/people4/people4.wav</DataFile>
+        <SessionFile>/Data/people4/people4.imsession</SessionFile>
+        <LabelFile modified="5250507233230946940">/Data/people4/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people3" sessionId="5688a4ab-fa60-4dea-bc21-c99135f9bc2a" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people3" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220278417501" start="0" length="59.5218125">/Data/people3/people3.wav</DataFile>
+        <SessionFile>/Data/people3/people3.imsession</SessionFile>
+        <LabelFile modified="5250507233155069736">/Data/people3/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5179252">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw2" sessionId="d29fd6f4-bdfd-45eb-9af3-3f71d7599e5d" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw2" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507213775817651" start="0" length="59.5218125">/Data/chainsaw2/chainsaw2.wav</DataFile>
+        <SessionFile>/Data/chainsaw2/chainsaw2.imsession</SessionFile>
+        <LabelFile modified="5250507228534822955">/Data/chainsaw2/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people13" sessionId="4a4b60d0-b8ca-4d59-9e5f-abf1aa5bdb37" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people13" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507221529049924" start="0" length="59.5218125">/Data/people13/people13.wav</DataFile>
+        <SessionFile>/Data/people13/people13.imsession</SessionFile>
+        <LabelFile modified="5250507232941259228">/Data/people13/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest8" sessionId="5418c5f0-59a0-4231-886a-fed0340b5df7" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest8" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507218769807716" start="0" length="59.5218125">/Data/forest8/forest8.wav</DataFile>
+        <SessionFile>/Data/forest8/forest8.imsession</SessionFile>
+        <LabelFile modified="5250507232349563195">/Data/forest8/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+    </DataSet>
+    <DataSet id="validation" targetSize="0.10242244786208368" labels="Complete">
+      <Session name="people7" sessionId="75a32628-9d26-4ab9-b769-98fb36a69069" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people7" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220704478481" start="0" length="59.5218125">/Data/people7/people7.wav</DataFile>
+        <SessionFile>/Data/people7/people7.imsession</SessionFile>
+        <LabelFile modified="5250507233523874613">/Data/people7/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw7" sessionId="0da24f1f-749e-4a4f-a4e6-3de633a6acac" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw7" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507214965080216" start="0" length="59.5218125">/Data/chainsaw7/chainsaw7.wav</DataFile>
+        <SessionFile>/Data/chainsaw7/chainsaw7.imsession</SessionFile>
+        <LabelFile modified="5250507230144646681">/Data/chainsaw7/label.label</LabelFile>
+        <Labels>
+          <Label count="5" length="55.4908443">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest5" sessionId="22845641-6d98-436f-a34f-97af9b3525cf" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest5" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507218132692616" start="0" length="59.5218125">/Data/forest5/forest5.wav</DataFile>
+        <SessionFile>/Data/forest5/forest5.imsession</SessionFile>
+        <LabelFile modified="5250507232051140623">/Data/forest5/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+    </DataSet>
+    <DataSet id="test" targetSize="0.20012241436121916" labels="Complete">
+      <Session name="forest12" sessionId="4a2aa9ee-3949-4612-9349-fd5eba8ff1ed" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest12" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507219309240208" start="0" length="59.5218125">/Data/forest12/forest12.wav</DataFile>
+        <SessionFile>/Data/forest12/forest12.imsession</SessionFile>
+        <LabelFile modified="5250507231599052967">/Data/forest12/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people1" sessionId="f30c3b18-2286-40f8-9888-220eb0386e42" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people1" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507220073241388" start="0" length="59.5218125">/Data/people1/people1.wav</DataFile>
+        <SessionFile>/Data/people1/people1.imsession</SessionFile>
+        <LabelFile modified="5250507232597930798">/Data/people1/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people10" sessionId="fe007a60-c79a-4266-8c5b-f1272ebdd67b" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people10" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507221207462712" start="0" length="59.5218125">/Data/people10/people10.wav</DataFile>
+        <SessionFile>/Data/people10/people10.imsession</SessionFile>
+        <LabelFile modified="5250507232678957462">/Data/people10/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw4" sessionId="82c7d163-a191-4f56-bd5f-22c50749bf7b" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw4" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507214217041960" start="0" length="59.5218125">/Data/chainsaw4/chainsaw4.wav</DataFile>
+        <SessionFile>/Data/chainsaw4/chainsaw4.imsession</SessionFile>
+        <LabelFile modified="5250507228917927165">/Data/chainsaw4/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="people11" sessionId="64c73378-b7dc-488b-b525-35045c4d6607" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="people11" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507221301302609" start="0" length="59.5218125">/Data/people11/people11.wav</DataFile>
+        <SessionFile>/Data/people11/people11.imsession</SessionFile>
+        <LabelFile modified="5250507232755141292">/Data/people11/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Human</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw9" sessionId="8ffd1b2e-e7d9-4b2b-8b49-5a8aebb89798" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw9" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507215387958403" start="0" length="59.5218125">/Data/chainsaw9/chainsaw9.wav</DataFile>
+        <SessionFile>/Data/chainsaw9/chainsaw9.imsession</SessionFile>
+        <LabelFile modified="5250507230963341919">/Data/chainsaw9/label.label</LabelFile>
+        <Labels>
+          <Label count="4" length="57.4551794">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest1" sessionId="80a66df9-66a5-4b1e-8a92-7c6c0f4468c5" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest1" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507217436088600" start="0" length="59.5218125">/Data/forest1/forest1.wav</DataFile>
+        <SessionFile>/Data/forest1/forest1.imsession</SessionFile>
+        <LabelFile modified="5250507231141152842">/Data/forest1/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="forest2" sessionId="39dab336-8beb-49ee-aca8-586ecf5ff684" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="forest2" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507217718334465" start="0" length="59.5218125">/Data/forest2/forest2.wav</DataFile>
+        <SessionFile>/Data/forest2/forest2.imsession</SessionFile>
+        <LabelFile modified="5250507231777372492">/Data/forest2/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="59.5218125">Standby</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+      <Session name="chainsaw3" sessionId="1577048d-8d07-4f72-945c-6f37af4ef087" originalSessionId="00000000-0000-0000-0000-000000000000" ownerLocked="False" labelTrack="label" dataTrack="chainsaw3" tags="None">
+        <DataFile shape="[1]" samplerate="16000" modified="5250507213996613080" start="0" length="60.05325">/Data/chainsaw3/chainsaw3.wav</DataFile>
+        <SessionFile>/Data/chainsaw3/chainsaw3.imsession</SessionFile>
+        <LabelFile modified="5250507228804569652">/Data/chainsaw3/label.label</LabelFile>
+        <Labels>
+          <Label count="1" length="60.05325">Chainsaw</Label>
+        </Labels>
+        <CustomColumnValues />
+      </Session>
+    </DataSet>
+  </Database>
+  <PredefinedLabels>
+    <Label>Chainsaw</Label>
+    <Label>Standby</Label>
+    <Label>Human</Label>
+  </PredefinedLabels>
+</ImagimobStudio>

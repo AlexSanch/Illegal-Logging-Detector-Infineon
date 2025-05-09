@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Imaginet version="2.0.0.0">
+  <Compound unit="d419d86b-7b57-41d3-9a74-ab428f13a213">
+    <Nodes>
+      <DeviceNode id="node_0" x="121.9378384365699" y="275.85775598855747" enabled="true" name="Microphone" board="290de5cb-460b-41bf-31cb-8c012f1faff5" boardName="PSOC 6 AI (CY8CKIT-06S2-AI)" device="0" />
+      <UnitNode id="node_2" x="433.4000000000001" y="279.8" enabled="true" unit="Imaginet.Units.KerasModel">
+        <StringArgument param="file_path">C:/Users/VAI/Documents/DeepCraft/Illegal Logging Detector Model/Models/conv1dlstm-large-accuracy-2/conv1dlstm-large-accuracy-2.h5</StringArgument>
+      </UnitNode>
+      <UnitNode id="node_3" x="1029.207956348786" y="154.47950411758467" enabled="true" name="Keras Model Labels" unit="ImagimobStudio.Modules.LabelTrack" />
+      <UnitNode id="node_4" x="1031.1343117806273" y="288.36120663051526" enabled="true" name="Keras Model Data" unit="ImagimobStudio.Modules.DataTrack" />
+    </Nodes>
+    <Connections>
+      <Connection>
+        <Source node="node_2" param="output" />
+        <Target node="node_3" param="data" />
+      </Connection>
+      <Connection>
+        <Source node="node_2" param="output" />
+        <Target node="node_4" param="data" />
+      </Connection>
+      <Connection>
+        <Source node="node_0" param="Audio" />
+        <Target node="node_2" param="input" />
+      </Connection>
+    </Connections>
+  </Compound>
+</Imaginet>

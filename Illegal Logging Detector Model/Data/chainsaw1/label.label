@@ -1,0 +1,7 @@
+Time(Seconds),Length(Seconds),Label(string),Confidence(double),Comment(string)
+1.6558511,5.6321242,Chainsaw,1,
+9.8473395,14.8538068,Chainsaw,1,
+24.7276823,15.5168036,Chainsaw,1,
+48.6421878,2.665381,Chainsaw,1,
+51.6209362,1.1205634,Chainsaw,1,
+59.0157435,0.4754825,Chainsaw,1,
