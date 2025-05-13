@@ -168,29 +168,31 @@ Este resultado lo obtenemos al poner un simulador de Chainsaw alado del device, 
 
 <img src="./Images/chain.jpg" width="100%">
 
-- Posteriormente para tener una señal de salida una vez se conloque en un arbol, le pusimos unqa configuracion de LED RGB con el fin de visualizar los resultados en tiempo real.
+Posteriormente, para tener una señal de salida una vez se coloque en un árbol, le pusimos una configuración de LED RGB con el fin de visualizar los resultados en tiempo real.
 
-    ```c
-    else if(best_label != 0 && max_score >= 0.50)
-    {
-      prev_best_label = best_label;
-      printf("Output: %-30s\r\n", label_text[best_label]);
-      if(label_text[best_label]=="Chainsaw"){
-        turnOnRed();
-        turnOnBuzzer();
-      }
-      else if(label_text[best_label]=="Human"){
-        turnOnBlue();
-        turnOffBuzzer();
-      }
-      else if(label_text[best_label]=="Standby" || label_text[best_label]=="unlabelled"){
-        turnOnGreen();
-        turnOffBuzzer();
-      }
-    }
-    ```
+```c
+else if(best_label != 0 && max_score >= 0.50)
+{
+  prev_best_label = best_label;
+  printf("Output: %-30s\r\n", label_text[best_label]);
+  if(label_text[best_label]=="Chainsaw"){
+    turnOnRed();
+    turnOnBuzzer();
+  }
+  else if(label_text[best_label]=="Human"){
+    turnOnBlue();
+    turnOffBuzzer();
+  }
+  else if(label_text[best_label]=="Standby" || label_text[best_label]=="unlabelled"){
+    turnOnGreen();
+    turnOffBuzzer();
+  }
+}
+```
 
-<img src="./Images/chain.jpg" width="100%">
+El circuito se ve de esta manera, es muy sencillo pero los valroes de las reisistencias para un buen funcionamiento.
+
+<img src="./Images/rgb.jpg" width="70%">
 
 # Final Product:
 
