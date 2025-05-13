@@ -168,7 +168,7 @@ Este resultado lo obtenemos al poner un simulador de Chainsaw alado del device, 
 
 <img src="./Images/chain.jpg" width="100%">
 
-Posteriormente para tener una señal de salida una vez se conloque en un arbol, le pusimos unqa configuracion de LED RGB con el fin de visualizar los resultados en tiempo real.
+- Posteriormente para tener una señal de salida una vez se conloque en un arbol, le pusimos unqa configuracion de LED RGB con el fin de visualizar los resultados en tiempo real.
 
     ```c
     else if(best_label != 0 && max_score >= 0.50)
