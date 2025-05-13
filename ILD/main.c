@@ -111,7 +111,12 @@ static void init_board(void);
 static void init_audio(cyhal_pdm_pcm_t* pdm_pcm);
 static void halt_error(int code);
 static void pdm_frequency_fix();
-
+static void turnOnRed(void);
+static void turnOnBlue(void);
+static void turnOnGreen(void);
+static void turnOff(void);
+static void turnOnBuzzer(void);
+static void turnOffBuzzer(void);
 
 /*******************************************************************************
 * Function Name: main
@@ -233,6 +238,18 @@ int main(void)
                     {
                         prev_best_label = best_label;
                         printf("Output: %-30s\r\n", label_text[best_label]);
+                        if(label_text[best_label]=="Chainsaw"){
+                        	turnOnRed();
+                        	turnOnBuzzer();
+                        }
+                        else if(label_text[best_label]=="Human"){
+							turnOnBlue();
+							turnOffBuzzer();
+						}
+                        else if(label_text[best_label]=="Standby" || label_text[best_label]=="unlabelled"){
+							turnOnGreen();
+							turnOffBuzzer();
+						}
                     }
                     /* Else the best label is "unlabeled" */
                     printf("\r\n");
@@ -247,6 +264,38 @@ int main(void)
             }
         }
     }
+}
+
+static void turnOnRed(void){
+	Cy_GPIO_Write(P9_1_PORT, P9_1_NUM, CYBSP_LED_STATE_OFF); // R
+	Cy_GPIO_Write(P9_2_PORT, P9_2_NUM, CYBSP_LED_STATE_ON); // G
+	Cy_GPIO_Write(P9_3_PORT, P9_3_NUM, CYBSP_LED_STATE_ON); // B
+}
+
+static void turnOnGreen(void){
+	Cy_GPIO_Write(P9_1_PORT, P9_1_NUM, CYBSP_LED_STATE_ON); // R
+	Cy_GPIO_Write(P9_2_PORT, P9_2_NUM, CYBSP_LED_STATE_OFF); // G
+	Cy_GPIO_Write(P9_3_PORT, P9_3_NUM, CYBSP_LED_STATE_ON); // B
+}
+
+static void turnOnBlue(void){
+	Cy_GPIO_Write(P9_1_PORT, P9_1_NUM, CYBSP_LED_STATE_ON); // R
+	Cy_GPIO_Write(P9_2_PORT, P9_2_NUM, CYBSP_LED_STATE_ON); // G
+	Cy_GPIO_Write(P9_3_PORT, P9_3_NUM, CYBSP_LED_STATE_OFF); // B
+}
+
+static void turnOff(void){
+	Cy_GPIO_Write(P9_1_PORT, P9_1_NUM, CYBSP_LED_STATE_OFF); // R
+	Cy_GPIO_Write(P9_2_PORT, P9_2_NUM, CYBSP_LED_STATE_OFF); // G
+	Cy_GPIO_Write(P9_3_PORT, P9_3_NUM, CYBSP_LED_STATE_OFF); // B
+}
+
+static void turnOnBuzzer(void){
+	Cy_GPIO_Write(P9_0_PORT, P9_0_NUM, CYBSP_LED_STATE_OFF); // Buzzer
+}
+
+static void turnOffBuzzer(void){
+	Cy_GPIO_Write(P9_0_PORT, P9_0_NUM, CYBSP_LED_STATE_ON); // Buzzer
 }
 
 
@@ -282,6 +331,14 @@ static void init_board(void)
 
     /* Enable global interrupts */
     __enable_irq();
+
+    /* Initialize Buzzer */
+    Cy_GPIO_Pin_FastInit(P9_0_PORT, P9_0_NUM, CY_GPIO_DM_STRONG_IN_OFF, 0UL, P9_0_GPIO); // Buzzer
+
+    /* Initialize LEDS */
+    Cy_GPIO_Pin_FastInit(P9_1_PORT, P9_1_NUM, CY_GPIO_DM_STRONG_IN_OFF, 0UL, P9_1_GPIO); // R
+    Cy_GPIO_Pin_FastInit(P9_2_PORT, P9_2_NUM, CY_GPIO_DM_STRONG_IN_OFF, 0UL, P9_2_GPIO); // G
+    Cy_GPIO_Pin_FastInit(P9_3_PORT, P9_3_NUM, CY_GPIO_DM_STRONG_IN_OFF, 0UL, P9_3_GPIO); // B
 
     /* Initialize retarget-io to use the debug UART port */
     result = cy_retarget_io_init_fc(

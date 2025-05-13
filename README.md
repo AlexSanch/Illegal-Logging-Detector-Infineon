@@ -38,6 +38,8 @@ With the CY8CKIT-062S2-AI i will obtain an audio signal which, through DEEPCRAFT
 
 # System:
 
+<img src="./Images/diagram.png" width="100%">
+
 ### Features:
 
 * Low-power battery consumption (CY8CKIT-062S2-AI).
@@ -48,6 +50,12 @@ With the CY8CKIT-062S2-AI i will obtain an audio signal which, through DEEPCRAFT
 
 * CY8CKIT-062S2-AI. 1x.
   * https://www.infineon.com/cms/en/product/evaluation-boards/cy8ckit-062s2-ai/
+* RGB Led 1x. 
+  * https://www.amazon.com/Tri-Color-Multicolor-Difundido-Resistencias-Incluido/dp/B077XGF3YR/?th=1
+* 100 Ohms Resistor 3x. 
+  * https://www.amazon.com/EDGELEC-resistencias-tolerancia-m%C3%BAltiples-resistencia/dp/B07QG1VL1Q
+* Buzzer 1x. 
+  * https://www.amazon.com/DC-electr%C3%B3nico-zumbador-vivienda-conector/dp/B0DHRMYHQ2
 
 ### Software:
 
@@ -160,12 +168,36 @@ Este resultado lo obtenemos al poner un simulador de Chainsaw alado del device, 
 
 <img src="./Images/chain.jpg" width="100%">
 
+Posteriormente para tener una señal de salida una vez se conloque en un arbol, le pusimos unqa configuracion de LED RGB con el fin de visualizar los resultados en tiempo real.
+
+    ```c
+    else if(best_label != 0 && max_score >= 0.50)
+    {
+      prev_best_label = best_label;
+      printf("Output: %-30s\r\n", label_text[best_label]);
+      if(label_text[best_label]=="Chainsaw"){
+        turnOnRed();
+        turnOnBuzzer();
+      }
+      else if(label_text[best_label]=="Human"){
+        turnOnBlue();
+        turnOffBuzzer();
+      }
+      else if(label_text[best_label]=="Standby" || label_text[best_label]=="unlabelled"){
+        turnOnGreen();
+        turnOffBuzzer();
+      }
+    }
+    ```
+
+<img src="./Images/chain.jpg" width="100%">
+
 # Final Product:
 
 Case Closed:
 
-<img src="./Images/case2.jpg">
+<img src="./Images/case3.jpg">
 
 Case open:
 
-<img src="./Images/case1.jpg">
+<img src="./Images/case4.jpg">
