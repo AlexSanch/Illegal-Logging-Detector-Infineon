@@ -188,7 +188,7 @@ else if(best_label != 0 && max_score >= 0.50)
     turnOffBuzzer();
   }
 }
-
+```
 
 The circuit looks like this; it is very simple but the resistor values are important for proper operation.
 <img src="./Images/rgb.jpg" width="70%">
