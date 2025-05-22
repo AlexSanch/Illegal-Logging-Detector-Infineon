@@ -68,13 +68,13 @@ With the CY8CKIT-062S2-AI i will obtain an audio signal which, through DEEPCRAFT
 
 # Capturing Data:
 
-La calidad de un modelo de AI depende mucho de los datos con los que se entrene,  en mi caso estoy buscando 3 detecciones principales.
+The quality of an AI model depends greatly on the data with which it is trained; in my case I am looking for 3 main detections.
 
-- Chainsaw: Detectar si hay ruido de chainsaw que vayan a cortar un arbol.
-- People: La deteccion de voz humana, para detectar presenciq humana cerca del area.
-- Forest: este seria el ruido de un bosque, este seria el estado base del sistema ya que en el bosque no suele haber silencio absoluto.
- 
-Ahora explicare un poco los detalles de los datos y el porque de la distribucion.
+- Chainsaw: Detect if there is chainsaw noise indicating that a tree is about to be cut.
+- People: The detection of human voice, to detect human presence near the area.
+- Forest: This would be the noise of a forest; this would be the base state of the system since in the forest there is rarely absolute silence.
+
+Now I will explain a bit about the data details and the reason for the distribution.
 
 | Category  | Number of DataFrames | Duration per DataFrame |
 |-----------|---------------------|------------------------|
@@ -82,93 +82,93 @@ Ahora explicare un poco los detalles de los datos y el porque de la distribucion
 | Forest    | 13                  | 1 min each            |
 | People    | 13                  | 1 min each            |
 
-Esta distribucion de 13 archivos de audio de una duracion de 1 min cada uno, tiene el fin de facilitar a DEEPCRAFT™ la division y el entrenamiento del modelo con los datos.
+This distribution of 13 audio files, each with a duration of 1 minute, is intended to make it easier for DEEPCRAFT™ to split and train the model with the data.
 
 <img src="./Images/deep1.png" width="100%">
 
-Todos estos datos fueron recortados en Audacity para facilitar la manipulacion del audio, ademas este programa nos permite convertir a Mono el audio y asegurarnos que esta a 16kHz como el input de el microfono en la board.
+All these data were trimmed in Audacity to facilitate audio manipulation; in addition, this program allows us to convert the audio to Mono and ensure that it is at 16kHz, like the microphone input on the board.
 
-Todos los dataframes estan en la siguiente liga: [CLICK HERE](./Illegal%20Logging%20Detector%20Model/Data/)
+All the dataframes are at the following link: [CLICK HERE](./Illegal%20Logging%20Detector%20Model/Data/)
 
 # DEEPCRAFT™:
 
 ### Labeling:
 
-Como se menciono en el punto anterior las bases de datos estan distribuidas de forma que DEEPCRAFT™ sea capaz de ideintificar cada uno de los dataframes como segmentos diferentes.
+As mentioned in the previous point, the databases are distributed so that DEEPCRAFT™ can identify each of the dataframes as different segments.
 
 <img src="./Images/deep2.png" width="100%">
 
-Las prediction labels que vamos a identificar en todos estos audios seran las descritas anteriormente.
+The prediction labels that we will identify in all these audios will be the ones described earlier.
 
 <img src="./Images/deep3.png" width="100%">
 
 ### Distribute:
 
-Una vez realizado el labeling de todos los audios, podras de forma manual seleccionar a donde va cada uno de los sets, Train, Test or Validation. Sin embargo ya que realizamos segmentos uniformes, podremos hacer la distribucion automatica con el programa.
+Once the labeling of all the audios is done, you can manually select where each of the sets goes, Train, Test or Validation. However, since we created uniform segments, we can do the automatic distribution with the program.
 
 <img src="./Images/deep4.png" height="300px">
 
 ### Preprocessor:
 
-Si todos los pasos anteriores estan correctos podemos pasar a la seccion de Preprocessor, esta seccion es sumamente importante para realizar el modelo ya que tendremos que agregar unos componentes adicionales para que el modelo funcione correctamente en la board.
+If all the previous steps are correct, we can move on to the Preprocessor section; this section is extremely important to create the model because we will have to add some additional components so that the model works correctly on the board.
 
 <img src="./Images/deep5.png" width="100%">
 
-- Imagimob Speech Features: Este componente realizara un preprocesamiento de la señal para poder obtener solo las features relevantes para el modelo, aunque para nuestro proyecto un rango de 300Hz - 8000Hz es suficiente, recomendamos realizar un analisis de espectrograma de tus audios para estar seguro que no pierdes features importantes.
+- Imagimob Speech Features: This component will perform a preprocessing of the signal in order to obtain only the relevant features for the model; although for our project a range of 300Hz - 8000Hz is sufficient, we recommend performing a spectrogram analysis of your audios to be sure you do not lose important features.
 
 <img src="./Images/deep6.png" height="300px">
 
-- Contextual Window (Sliding Window): Esta capa de preprocesamiento nos permite realizar la tecnica de windowing para procesar los datos en la red neuronal, esta estrategia es ampliamente utilizada en modelos dedicados a IoT y ademas el modelo no permitira compilarlo de no usarla.
+- Contextual Window (Sliding Window): This preprocessing layer allows us to perform the windowing technique to process the data in the neural network; this strategy is widely used in models dedicated to IoT and moreover the model will not allow compilation if we do not use it.
 
 <img src="./Images/deep7.png" width="100%">
 
 ### Model Selection:
 
-Debido a que vamos a correr el modelo en una board pequeña, lo mejor es tratar que los modelos AI sean los mas pequeños posibles, aunque yo use la siguiente configuracion, puedes experimentar con otras configuraciones.
+Because we are going to run the model on a small board, it is best to try to make the AI models as small as possible; although I used the following configuration, you can experiment with other configurations.
 
 <img src="./Images/deep8.png" width="100%">
 
 ### Model Validation:
 
-Una vez realizado el entrenamiento del modelo de AI obtuvimos los sigientes resultados.
+Once the training of the AI model was done, we obtained the following results.
 
 <img src="./Images/deep9.png" height="400px">
 
-Este modelo lo revisamos directamente en el programa con el fin de ver que este dando los resultados correctos.
+We reviewed this model directly in the program to see that it is giving the correct results.
 
 <img src="./Images/deep10.png" width="100%">
 
-Finalmente los resultados para realizar la deteccion de voz humana fueron correctos.
+Finally, the results to perform the detection of human voice were correct.
 
 <img src="./Images/deep11.png" width="100%">
 
 ### Generate Code:
 
-Tan solo con el archivo .h5 no es suficiente para ya desplegar el modelo en nuestra board, para ello deberemos de convertir la red neuronal en los archivos model.c y model.h con el formato correcto para que pueda correr en la board, asi que deberas configurar los siguiente parametros  y generar el codigo.
+Just with the .h5 file it is not enough to already deploy the model on our board; for this we will have to convert the neural network into the files model.c and model.h in the correct format so that it can run on the board, so you will have to configure the following parameters and generate the code.
 
 <img src="./Images/deep12.png" width="100%">
 
 # ModusToolbox™
 
-Finalmente con los archivos model.c y model.h, podremos desplegarlo en nuestro device mediante el proyecto de Modus.
+Finally, with the model.c and model.h files, we will be able to deploy it on our device through the Modus project.
 
 <img src="./Images/modus1.png" width="100%">
 
 ### Deploy Model:
 
-Recomendamos copiar el proyecto dentro de este repositorio para evitar problemas de compatibilidad, finalmente solo quedaria realizar el build del proyecto y programar nuestra board.
+We recommend copying the project inside this repository to avoid compatibility problems; finally only the build of the project would be left and to program our board.
 
 <img src="./Images/modus2.png" width="100%">
 
-Si todos los pasos anteriores los realizaste correctamente, deberas de ver los resultados del modelo directamente en la terminal.
+If you did all the previous steps correctly, you should see the results of the model directly in the terminal.
 
 <img src="./Images/modus3.png" width="100%">
 
-Este resultado lo obtenemos al poner un simulador de Chainsaw alado del device, mostrando que esta detectando correctamente la chainsaw.
+We obtain this result by placing a Chainsaw simulator next to the device, showing that it is correctly detecting the chainsaw.
 
 <img src="./Images/chain.jpg" width="100%">
 
-Posteriormente, para tener una señal de salida una vez se coloque en un árbol, le pusimos una configuración de LED RGB con el fin de visualizar los resultados en tiempo real.
+Subsequently, to have an output signal once it is placed on a tree, we set up an RGB LED configuration in order to visualize the results in real time.
 
 ```c
 else if(best_label != 0 && max_score >= 0.50)
@@ -188,10 +188,9 @@ else if(best_label != 0 && max_score >= 0.50)
     turnOffBuzzer();
   }
 }
-```
 
-El circuito se ve de esta manera, es muy sencillo pero los valroes de las reisistencias para un buen funcionamiento.
 
+The circuit looks like this; it is very simple but the resistor values are important for proper operation.
 <img src="./Images/rgb.jpg" width="70%">
 
 # Final Product:
